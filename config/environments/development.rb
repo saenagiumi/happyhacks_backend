@@ -63,5 +63,8 @@ Rails.application.configure do
 
   # Hostname
   # localhost:3000では通信に失敗するためhostをdocker-compose.ymlのコンテナ名に合わせる
-  config.hosts << 'api'
+  # config.hosts << 'api'
+  # config.hosts << 'localhost'
+  # config.hosts << '127.0.0.1'
+  # config.hosts << '192.168.10.102'
 end
