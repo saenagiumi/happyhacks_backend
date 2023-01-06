@@ -7,8 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins '127.0.0.1:3001', 'localhost:3001', '192.168.10.109:3001'
-    # https://happy-hacks-frontend.vercel.app/
+    origins '127.0.0.1:3001', 'localhost:3001', '192.168.10.109:3001', '127.0.0.1','https://happy-hacks-frontend.vercel.app/', 'http://happy-hacks-api-alb-189139654.ap-northeast-1.elb.amazonaws.com/'
     
     resource '*',
       headers: :any,
