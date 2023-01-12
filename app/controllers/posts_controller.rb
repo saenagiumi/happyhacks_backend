@@ -3,14 +3,14 @@ class PostsController < ApplicationController
 
   # GET /posts
   def index
-    @posts = User.joins(:posts).select("posts.id, posts.created_at, title, body, name AS user")
+    @posts = User.joins(:posts).select("posts.id, posts.created_at, title, body, name")
 
     render json: @posts
   end
 
   # GET /posts/1
   def show
-    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, user: @post.user.name}
+    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, name: @post.user.name}
   end
 
   # POST /posts
