@@ -1,5 +1,6 @@
-class PostsController < ApplicationController
+class PostsController < SecuredController
   before_action :set_post, only: [:show, :update, :destroy]
+  skip_before_action :authorize_request, only: [:index,:show]
 
   # GET /posts
   def index
@@ -15,12 +16,13 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
-    @post = Post.new(post_params)
+    # ユーザー認証
+    post = @current_user.posts.build(post_params)
 
-    if @post.save
-      render json: @post, status: :created, location: @post
+    if post.save
+      render json: post
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render json: post.errors, status: :unprocessable_entity
     end
   end
 
