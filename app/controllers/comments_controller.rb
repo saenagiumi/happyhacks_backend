@@ -1,5 +1,6 @@
-class CommentsController < ApplicationController
+class CommentsController < SecuredController
   before_action :set_comment, only: [:show, :update, :destroy]
+  skip_before_action :authorize_request, only: [:index]
 
   # GET /comments
   def index
@@ -15,12 +16,12 @@ class CommentsController < ApplicationController
 
   # POST /comments
   def create
-    @comment = Comment.new(comment_params)
+    comment = @current_user.comments.build(comment_params)
 
-    if @comment.save
-      render json: @comments, status: :created, location: @comments
+    if comment.save
+      render json: comment
     else
-      render json: @comment.errors, status: :unprocessable_entity
+      render json: comment.errors, status: :unprocessable_entity
     end
   end
 
