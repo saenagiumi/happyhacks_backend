@@ -4,7 +4,7 @@ class PostsController < SecuredController
 
   # GET /posts
   def index
-    @posts = User.joins(:posts).select("posts.id, posts.created_at, title, body, name")
+    @posts = User.joins(:posts).select("posts.id, posts.created_at, title, body, name, sub, picture")
 
     render json: @posts
   end
