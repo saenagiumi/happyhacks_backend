@@ -16,7 +16,7 @@ class PostsController < SecuredController
 
   # GET /posts/1
   def show
-    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, name: @post.user.name, comments_count: @post.comments.count}
+    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, name: @post.user.name, picture: @post.user.picture, comments_count: @post.comments.count}
   end
 
   # POST /posts
