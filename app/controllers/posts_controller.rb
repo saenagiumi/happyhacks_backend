@@ -10,13 +10,13 @@ class PostsController < SecuredController
   end
 
   def index_with_comments_count
-    @posts = Post.joins(:comments, :user).group("posts.id, users.name, users.picture").select("posts.*, users.name, users.picture, count(comments.id) as comments_count")
+    @posts = Post.joins(:user).select("posts.*, users.name, users.picture, coalesce(count(comments.id), 0) as comments_count").left_joins(:comments).group("posts.id, users.name, users.picture")
     render json: @posts
   end
 
   # GET /posts/1
   def show
-    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, name: @post.user.name, comments_count: @post.comments.count}
+    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, name: @post.user.name, picture: @post.user.picture, comments_count: @post.comments.count}
   end
 
   # POST /posts
