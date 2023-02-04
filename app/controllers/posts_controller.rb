@@ -1,6 +1,6 @@
 class PostsController < SecuredController
   before_action :set_post, only: [:show, :update, :destroy]
-  skip_before_action :authorize_request, only: [:index,:show]
+  skip_before_action :authorize_request, only: [:index,:index_with_comments_count,:show]
 
   # GET /posts
   def index
@@ -9,9 +9,14 @@ class PostsController < SecuredController
     render json: @posts
   end
 
+  def index_with_comments_count
+    @posts = Post.joins(:comments, :user).group("posts.id, users.name, users.picture").select("posts.*, users.name, users.picture, count(comments.id) as comments_count")
+    render json: @posts
+  end
+
   # GET /posts/1
   def show
-    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, name: @post.user.name}
+    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, name: @post.user.name, comments_count: @post.comments.count}
   end
 
   # POST /posts
