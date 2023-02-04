@@ -4,7 +4,7 @@ class CommentsController < SecuredController
 
   # GET /comments
   def index
-    @comments = User.joins(:comments).where("post_id = ?", params[:post_id]).select('users.id, title, body, name, picture, comments.created_at')
+    @comments = User.joins(:comments).where("post_id = ?", params[:post_id]).select('comments.id, title, body, name, picture, comments.created_at')
 
     render json: @comments
   end
