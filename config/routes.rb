@@ -4,5 +4,6 @@ Rails.application.routes.draw do
     resources :comments
   end
   resources :users
+  get 'posts_with_comments_count', to: 'posts#index_with_comments_count'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -10,43 +10,53 @@ User.create!(
   [
     {
       name: "河野太郎",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "12345"
     },
     {
       name: "奈良公園のシカ",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "23456"
     },
     {
       name: "ひがしものメバチマグロ",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "34567"
     },
     {
       name: "エンバペ",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "45678"
     },
     {
       name: "一太郎スマイル",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "56789"
     },
     {
       name: "醸し人九平次",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "67891"
     },
     {
       name: "秋田太平山",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "78912"
     },
     {
       name: "ロナウジーニョ",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "89123"
     },
     {
       name: "デジタル田園都市",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "91234"
     },
     {
       name: "あさがおを摘む人",
-      email: "sample@example.com"
+      email: "sample@example.com",
+      sub: "012345"
     },
   ]
 )
