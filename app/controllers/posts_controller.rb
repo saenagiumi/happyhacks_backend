@@ -16,7 +16,7 @@ class PostsController < SecuredController
 
   # GET /posts/1
   def show
-    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, name: @post.user.name, picture: @post.user.picture, comments_count: @post.comments.count}
+    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, sub: @post.user.sub, name: @post.user.name, picture: @post.user.picture, comments_count: @post.comments.count}
   end
 
   # POST /posts
@@ -42,7 +42,12 @@ class PostsController < SecuredController
 
   # DELETE /posts/1
   def destroy
-    @post.destroy
+    if @current_user.id == @post.user_id
+      @post.destroy
+      render json: { message: 'Post successfully deleted' }, status: :no_content
+    else
+      render json: { error: 'You are not authorized to delete this post' }, status: :unauthorized
+    end
   end
 
   private
