@@ -1,6 +1,6 @@
 class UsersController < SecuredController
   before_action :set_user, only: [:show, :update, :destroy]
-  skip_before_action :authorize_request, only: [:index,:show]
+  skip_before_action :authorize_request, only: [:index,:show,:comments]
 
   # GET /users
   def index
@@ -12,6 +12,15 @@ class UsersController < SecuredController
   # GET /users/1
   def show
     render json: @user
+  end
+  
+  # GET /users/:sub/comments
+  def comments
+    user = User.find_by(sub: URI.decode_www_form(params[:sub].gsub('}', '')))
+    if user.present?
+      comments = user.comments
+      render json:  comments, status: :ok
+    end
   end
 
   # POST /users
