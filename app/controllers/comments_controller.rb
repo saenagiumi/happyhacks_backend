@@ -1,10 +1,10 @@
 class CommentsController < SecuredController
   before_action :set_comment, only: [:show, :update, :destroy]
-  skip_before_action :authorize_request, only: [:index]
+  skip_before_action :authorize_request, only: [:index, :show]
 
   # GET /comments
   def index
-    @comments = User.joins(:comments).where("post_id = ?", params[:post_id]).select('comments.id, title, body, name, picture, comments.created_at')
+    @comments = Comment.all
 
     render json: @comments
   end
@@ -27,10 +27,14 @@ class CommentsController < SecuredController
 
   # PATCH/PUT /comments/1
   def update
-    if @comment.update(comment_params)
-      render json: @comment
+    if @comment.user == @current_user
+      if @comment.update(update_comment_params)
+        render json: @comment
+      else
+        render json: @comment.errors, status: :unprocessable_entity
+      end
     else
-      render json: @comment.errors, status: :unprocessable_entity
+      render json: { error: 'You are not authorized to update this comment' }, status: :unauthorized
     end
   end
 
@@ -48,5 +52,10 @@ class CommentsController < SecuredController
     # Only allow a list of trusted parameters through.
     def comment_params
       params.require(:comment).permit(:title, :body, :post_id, :user_id)
+    end
+
+    # Only allow a list of trusted parameters through for updating a post
+    def update_comment_params
+      params.require(:comment).permit(:title, :body)
     end
 end
