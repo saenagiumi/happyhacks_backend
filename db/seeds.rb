@@ -180,3 +180,19 @@ Comment.create!(
     }
   ]
 )
+Like.create!(
+  [
+    {
+      user_id: "3",
+      comment_id: "10",
+    },
+  ]
+)
+Bookmark.create!(
+  [
+    {
+      user_id: "3",
+      comment_id: "10",
+    },
+  ]
+)
