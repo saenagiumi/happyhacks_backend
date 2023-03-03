@@ -1,9 +1,15 @@
 class User < ApplicationRecord
     has_many :posts, dependent: :destroy
     has_many :comments, dependent: :destroy
+    has_many :likes, dependent: :destroy
+    has_many :bookmarks, dependent: :destroy
+    has_many :liked_comments, through: :likes, source: :comment
+    has_many :bookmarked_comments, through: :bookmarks, source: :comment
 
-    # 対象のuserが存在する場合はuser情報を返し、存在しない場合は新規作成の処理を行う
+    validates_uniqueness_of :sub
+
+    # 対象のuserが存在する場合はuser情報を返す
     def self.from_token_payload(payload)
-        find_by(sub: payload['sub']) || create!(sub: payload['sub'], name: payload['.name'], email: payload['.email'], picture: payload['.picture'])
+        find_by(sub: payload['sub'])
     end
 end

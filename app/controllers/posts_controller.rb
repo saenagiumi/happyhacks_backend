@@ -1,11 +1,10 @@
 class PostsController < SecuredController
   before_action :set_post, only: [:show, :update, :destroy]
-  skip_before_action :authorize_request, only: [:index,:index_with_comments_count, :index_with_user_and_comments, :show]
+  skip_before_action :authorize_request, only: [:index,:index_with_comments_count, :index_with_user_and_comments, :show, :user]
 
   # GET /posts
   def index
-    @posts = User.joins(:posts).select("posts.id, posts.created_at, title, body, name, sub, picture")
-
+    @posts = Post.all
     render json: @posts
   end
 
@@ -20,9 +19,16 @@ class PostsController < SecuredController
     render json: @comments
   end
 
+  # GET /posts/id/user
+  def user
+    @post = Post.find(params[:id])
+    @user = @post.user
+    render json: @user
+  end 
+
   # GET /posts/1
   def show
-    render json: {id: @post.id, title: @post.title, body: @post.body, created_at: @post.created_at, sub: @post.user.sub, name: @post.user.name, picture: @post.user.picture, comments_count: @post.comments.count}
+    render json: @post
   end
 
   # POST /posts
