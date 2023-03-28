@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_20_215334) do
+ActiveRecord::Schema.define(version: 2023_03_20_033713) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,6 @@ ActiveRecord::Schema.define(version: 2023_02_20_215334) do
     t.string "sub", null: false
     t.string "picture"
     t.string "name"
-    t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["sub"], name: "index_users_on_sub", unique: true
