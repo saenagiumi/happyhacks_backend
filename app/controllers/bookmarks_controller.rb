@@ -1,23 +1,6 @@
 class BookmarksController < SecuredController
   before_action :set_comment, only: [:create]
-  skip_before_action :authorize_request, only: [:index]
-
-  def index
-    comment = Comment.find(params[:comment_id])
-    bookmarks = comment.bookmarks
-    counts = comment.bookmarks.count
-    render json: { status: :ok, bookmarks: bookmarks, counts: counts }
-  end
-
-  def show
-    @bookmark = @comment.bookmarks.find_by(user_id: params[:id])
-
-    if @bookmark
-      render json: { bookmarked: true }
-    else
-      render json: { bookmarked: false }
-    end
-  end
+  before_action :authorize_request
 
   def create
     @bookmark = @comment.bookmarks.build(user_id: @current_user.id)

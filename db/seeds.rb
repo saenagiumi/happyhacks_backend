@@ -10,54 +10,59 @@ User.create!(
   [
     {
       name: "河野太郎",
-      email: "sample@example.com",
-      sub: "12345"
+      sub: "12345",
+      picture: "/userAvatar/bear.svg"
     },
     {
       name: "奈良公園のシカ",
-      email: "sample@example.com",
-      sub: "23456"
+      sub: "23456",
+      picture: "/userAvatar/cat.svg"
     },
     {
       name: "ひがしものメバチマグロ",
-      email: "sample@example.com",
-      sub: "34567"
+      sub: "34567",
+      picture: "/userAvatar/chicken.svg"
     },
     {
       name: "エンバペ",
-      email: "sample@example.com",
-      sub: "45678"
+      sub: "45678",
+      picture: "/userAvatar/cow.svg"
     },
     {
       name: "一太郎スマイル",
-      email: "sample@example.com",
-      sub: "56789"
+      sub: "56789",
+      picture: "/userAvatar/panda.svg"
     },
     {
       name: "醸し人九平次",
-      email: "sample@example.com",
-      sub: "67891"
+      sub: "67891",
+      picture: "/userAvatar/dog.svg"
     },
     {
       name: "秋田太平山",
-      email: "sample@example.com",
-      sub: "78912"
+      sub: "78912",
+      picture: "/userAvatar/elephant.svg"
     },
     {
       name: "ロナウジーニョ",
-      email: "sample@example.com",
-      sub: "89123"
+      sub: "89123",
+      picture: "/userAvatar/mouse.svg"
     },
     {
       name: "デジタル田園都市",
-      email: "sample@example.com",
-      sub: "91234"
+      sub: "91234",
+      picture: "/userAvatar/penguin.svg"
     },
     {
       name: "あさがおを摘む人",
-      email: "sample@example.com",
-      sub: "012345"
+      sub: "0123456",
+      picture: "/userAvatar/rabbit.svg"
     },
+    {
+      name: "あさがお",
+      sub: "012345678",
+      picture: "/userAvatar/bear.svg"
+    }
   ]
 )
 
