@@ -12,14 +12,8 @@ class PostsController < SecuredController
     render json: @posts
   end
   
-  def user
-    @post = Post.find(params[:id])
-    @user = @post.user
-    render json: @user
-  end 
-  
   def show
-    render json: @post
+    render json: { post: @post, name: @post.user.name, picture: @post.user.picture }
   end
 
   def show_with_user_and_comments
