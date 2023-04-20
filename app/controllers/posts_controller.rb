@@ -3,24 +3,75 @@ class PostsController < SecuredController
   skip_before_action :authorize_request, only: [:index,:index_with_comments_count, :show_with_user_and_comments, :show, :user]
 
   def index
-    @posts = Post.all
-    render json: @posts
+    limit = params[:limit]
+    query = params[:search]
+    if query.present?
+      decoded_query = URI.decode_www_form_component(query)
+      posts = Post.where("title ILIKE ? OR body ILIKE ?", "%#{decoded_query}%", "%#{decoded_query}%")
+    else
+      posts = Post.order(id: :desc)
+    end
+    posts = posts.includes(:user, :comments)
+    posts = posts.map do |post|
+      {
+        id: post.id,
+        title: post.title,
+        body: post.body,
+        user_id: post.user_id,
+        created_at: post.created_at,
+        name: post.user.name,
+        picture: post.user.picture,
+        comments_count: post.comments.size
+      }
+    end
+    posts = posts.sort_by { |post| post[:comments_count] }.reverse
+    posts = posts.take(limit.to_i) if limit.present?
+    render json: posts
   end
+  # def index
+  #   limit = params[:limit]
+  #   query = params[:search]
+  #   if query.present?
+  #     decoded_query = URI.decode_www_form_component(query)
+  #     @posts = Post.where("title LIKE ? OR body LIKE ?", "%#{decoded_query}%", "%#{decoded_query}%")
+  #   else
+  #     @posts = Post.order(id: :desc)
+  #   end
+  #   @posts = @posts.limit(limit) if limit.present?
+  #   render json: @posts
+  # end
 
-  def index_with_comments_count
-    @posts = Post.joins(:user).select("posts.*, users.name, users.picture, coalesce(count(comments.id), 0) as comments_count").left_joins(:comments).group("posts.id, users.name, users.picture")
-    render json: @posts
-  end
+  # def index_with_comments_count
+  #   @posts = Post.includes(:user, :comments)
+  #   posts_with_comments_count = @posts.map do |post|
+  #     {
+  #       id: post.id,
+  #       title: post.title,
+  #       body: post.body,
+  #       user_id: post.user_id,
+  #       created_at: post.created_at,
+  #       name: post.user.name,
+  #       picture: post.user.picture,
+  #       comments_count: post.comments.size
+  #     }
+  #   end
+  #   posts_with_comments_count = posts_with_comments_count.sort_by { |post| post[:comments_count] }.reverse
+  #   posts_with_comments_count = posts_with_comments_count.take(params[:limit].to_i) if params[:limit].present?
+  #   render json: posts_with_comments_count 
+  # end
   
   def show
     render json: { post: @post, name: @post.user.name, picture: @post.user.picture }
   end
 
   def show_with_user_and_comments
-    @comments = User.joins(:comments).where("post_id = ?", params[:post_id]).select('comments.id, comments.post_id, title, body, name, picture, comments.created_at')
-
-    render json: @comments
-  end
+  @post = Post.find(params[:post_id])
+  @comments = @post.comments.includes(:user).order(id: :desc)
+  render json: @comments.to_json(
+    only: [:id, :post_id, :title, :body, :created_at],
+    include: {user: {only: [:name, :picture]}}
+  )
+end
 
   def create
     post = @current_user.posts.build(post_params)
@@ -40,16 +91,16 @@ def update
       render json: @post.errors, status: :unprocessable_entity
     end
   else
-    render json: { error: 'You are not authorized to update this post' }, status: :unauthorized
+    render json: { error: 'not authorized' }, status: :unauthorized
   end
 end
 
   def destroy
     if @current_user.id == @post.user_id
       @post.destroy
-      render json: { message: 'Post successfully deleted' }, status: :no_content
+      render json: { message: 'successfully deleted' }, status: :no_content
     else
-      render json: { error: 'You are not authorized to delete this post' }, status: :unauthorized
+      render json: { error: 'not authorized' }, status: :unauthorized
     end
   end
 

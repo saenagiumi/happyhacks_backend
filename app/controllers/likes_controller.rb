@@ -1,5 +1,5 @@
 class LikesController < SecuredController
-  before_action :set_comment, only: [:create]
+  before_action :set_comment_or_hack, only: [:create]
   skip_before_action :authorize_request, only: [:index]
 
   def index
@@ -8,7 +8,11 @@ class LikesController < SecuredController
   end
 
   def create
-    @like = @comment.likes.build(user_id: @current_user.id)
+    if params[:comment_id]
+      @like = @comment.likes.build(user_id: @current_user.id)
+    elsif params[:hack_id]
+      @like = @hack.likes.build(user_id: @current_user.id)
+    end
     if @like.save
       render json: @like, status: :ok
     else
@@ -17,14 +21,23 @@ class LikesController < SecuredController
   end
 
   def destroy
-    comment = Comment.find(params[:comment_id])
-    like = comment.likes.find(params[:id])
+    if params[:comment_id]
+      comment = Comment.find(params[:comment_id])
+      like = comment.likes.find(params[:id])
+    elsif params[:hack_id]
+      hack = Hack.find(params[:hack_id])
+      like = hack.likes.find(params[:id])
+    end
     like.destroy
     head :no_content
   end
 
   private
-  def set_comment
-    @comment = Comment.find(params[:comment_id])
+  def set_comment_or_hack
+    if params[:comment_id]
+      @comment = Comment.find(params[:comment_id])
+    elsif params[:hack_id]
+      @hack = Hack.find(params[:hack_id])
+    end
   end
 end
