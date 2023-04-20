@@ -4,7 +4,7 @@ class CommentsController < SecuredController
 
   def index
     post = Post.find(params[:post_id])
-    comments = post.comments
+    comments = post.comments.order(id: :desc)
     render json: comments
   end
 
