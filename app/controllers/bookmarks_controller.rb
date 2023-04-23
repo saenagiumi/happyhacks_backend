@@ -1,10 +1,9 @@
-class BookmarksController < SecuredController
-  before_action :set_comment, only: [:create]
+class BookmarksController < ApplicationController
+  before_action :set_bookmarkable, only: [:create, :destroy]
   before_action :authorize_request
 
   def create
-    @bookmark = @comment.bookmarks.build(user_id: @current_user.id)
-
+    @bookmark = @bookmarkable.bookmarks.build(user_id: @current_user.id)
     if @bookmark.save
       render json: @bookmark, status: :ok
     else
@@ -13,14 +12,14 @@ class BookmarksController < SecuredController
   end
 
   def destroy
-    comment = Comment.find(params[:comment_id])
-    bookmark = comment.bookmarks.find(params[:id])
-    bookmark.destroy
+    @bookmark = @bookmarkable.bookmarks.find(params[:id])
+    @bookmark.destroy
     head :no_content
   end
 
   private
-  def set_comment
-    @comment = Comment.find(params[:comment_id])
+  def set_bookmarkable
+    @bookmarkable = Comment.find(params[:comment_id]) if params[:comment_id]
+    @bookmarkable = Hack.find(params[:hack_id]) if params[:hack_id]
   end
 end

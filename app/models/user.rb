@@ -1,10 +1,13 @@
 class User < ApplicationRecord
     has_many :posts, dependent: :destroy
     has_many :comments, dependent: :destroy
+    has_many :hacks, dependent: :destroy
     has_many :likes, dependent: :destroy
     has_many :bookmarks, dependent: :destroy
     has_many :liked_comments, through: :likes, source: :comment
     has_many :bookmarked_comments, through: :bookmarks, source: :comment
+    has_many :liked_hacks, through: :likes, source: :hack
+    has_many :bookmarked_hacks, through: :bookmarks, source: :hack
 
     validates_uniqueness_of :sub
 
