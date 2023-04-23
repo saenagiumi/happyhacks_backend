@@ -20,7 +20,6 @@ class BookmarksController < SecuredController
   end
 
   private
-  def set_comment
-    @comment = Comment.find(params[:comment_id])
+    @bookmarkable = Hack.find(params[:hack_id]) if params[:hack_id]
   end
 end
