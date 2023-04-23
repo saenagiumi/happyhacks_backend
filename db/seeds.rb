@@ -185,6 +185,28 @@ Comment.create!(
     }
   ]
 )
+
+Hack.create!(
+  [
+    {
+      title: "ADHDの食生活をささえる技術",
+      body: "こういう情報助かります",
+      user_id: "3",
+      tweet_id: "1248213251235536896",
+      category: "health",
+      tags: ["食生活","健康","tweet"]
+    },
+    {
+      title: "鍵を無くしがちな人をささえる技術",
+      body: "最近は便利なIoT製品がいろいろありますよね",
+      user_id: "4",
+      tweet_id: "1626533711415234562",
+      category: "item",
+      tags: ["IoT","便利グッズ","tweet"]
+    },
+  ]
+)
+
 Like.create!(
   [
     {
@@ -193,6 +215,7 @@ Like.create!(
     },
   ]
 )
+
 Bookmark.create!(
   [
     {
