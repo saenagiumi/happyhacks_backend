@@ -1,25 +1,20 @@
-class PostsController < SecuredController
+class PostsController < ApplicationController
   before_action :set_post, only: [:show, :update, :destroy]
-  skip_before_action :authorize_request, only: [:index,:index_with_comments_count, :show_with_user_and_comments, :show, :user]
+  skip_before_action :authorize_request, only: [:index, :show, :user]
 
   def index
-    @posts = Post.all
-    render json: @posts
-  end
+    @posts = if params[:search].present?
+      search(params[:search])
+    else
+      Post.default_order
+    end.includes(:user, :comments).limit(params[:limit])
 
-  def index_with_comments_count
-    @posts = Post.joins(:user).select("posts.*, users.name, users.picture, coalesce(count(comments.id), 0) as comments_count").left_joins(:comments).group("posts.id, users.name, users.picture")
-    render json: @posts
+    posts_data = serialize_posts(@posts)
+    render json: posts_data
   end
   
   def show
-    render json: { post: @post, name: @post.user.name, picture: @post.user.picture }
-  end
-
-  def show_with_user_and_comments
-    @comments = User.joins(:comments).where("post_id = ?", params[:post_id]).select('comments.id, comments.post_id, title, body, name, picture, comments.created_at')
-
-    render json: @comments
+    render json: { post: serialize_post(@post) }
   end
 
   def create
@@ -32,24 +27,24 @@ class PostsController < SecuredController
     end
   end
 
-def update
-  if @post.user == @current_user
-    if @post.update(update_post_params)
-      render json: @post
+  def update
+    if @post.user == @current_user
+      if @post.update(update_post_params)
+        render json: @post
+      else
+        render json: @post.errors, status: :unprocessable_entity
+      end
     else
-      render json: @post.errors, status: :unprocessable_entity
+      render json: { error: 'not authorized' }, status: :unauthorized
     end
-  else
-    render json: { error: 'You are not authorized to update this post' }, status: :unauthorized
   end
-end
 
   def destroy
     if @current_user.id == @post.user_id
       @post.destroy
-      render json: { message: 'Post successfully deleted' }, status: :no_content
+      render json: { message: 'successfully deleted' }, status: :no_content
     else
-      render json: { error: 'You are not authorized to delete this post' }, status: :unauthorized
+      render json: { error: 'not authorized' }, status: :unauthorized
     end
   end
 
@@ -64,5 +59,29 @@ end
 
     def update_post_params
       params.require(:post).permit(:title, :body)
+    end
+
+    def search(query)
+      decoded_query = URI.decode_www_form_component(query)
+      Post.where("title ILIKE ? OR body ILIKE ?", "%#{decoded_query}%", "%#{decoded_query}%")
+    end
+
+    def serialize_posts(posts)
+      posts.map do |post|
+        serialize_post(post)
+      end.sort_by { |post| -post[:comments_count] }
+    end
+    
+    def serialize_post(post)
+      {
+        id: post.id,
+        title: post.title,
+        body: post.body,
+        user_id: post.user_id,
+        created_at: post.created_at,
+        name: post.user.name,
+        picture: post.user.picture,
+        comments_count: post.comments.size
+      }
     end
 end

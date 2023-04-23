@@ -13,9 +13,7 @@ Rails.application.routes.draw do
   get '/posts/:post_id/comments/:comment_id/bookmarks', to: 'comments#bookmarks'
   resources :posts do
     resources :comments, only: [:index, :create]
-    get 'comments_with_user', to: 'posts#show_with_user_and_comments'
   end
-  get 'posts_with_comments_count', to: 'posts#index_with_comments_count'
   resources :users, only: [:create, :show, :update] do
     get 'posts', on: :member
     get 'hacks', on: :member

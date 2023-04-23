@@ -1,5 +1,5 @@
-class LikesController < SecuredController
-  before_action :set_comment, only: [:create]
+class LikesController < ApplicationController
+  before_action :set_likable, only: [:create, :destroy]
   skip_before_action :authorize_request, only: [:index]
 
   def index
@@ -8,7 +8,7 @@ class LikesController < SecuredController
   end
 
   def create
-    @like = @comment.likes.build(user_id: @current_user.id)
+    @like = @likable.likes.build(user_id: @current_user.id)
     if @like.save
       render json: @like, status: :ok
     else
@@ -17,13 +17,14 @@ class LikesController < SecuredController
   end
 
   def destroy
-    comment = Comment.find(params[:comment_id])
-    like = comment.likes.find(params[:id])
-    like.destroy
+    @like = @likable.likes.find(params[:id])
+    @like.destroy
     head :no_content
   end
 
   private
+  def set_likable
+    @likable = Comment.find(params[:comment_id]) if params[:comment_id]
     @likable = Hack.find(params[:hack_id]) if params[:hack_id]
   end
 end

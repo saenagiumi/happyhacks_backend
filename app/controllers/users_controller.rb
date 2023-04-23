@@ -1,4 +1,4 @@
-class UsersController < SecuredController
+class UsersController < ApplicationController
   before_action :set_user, only: [:update, :destroy]
   skip_before_action :authorize_request, only: [:index, :posts, :hacks, :comments]
 
@@ -9,7 +9,7 @@ class UsersController < SecuredController
 
   def posts
     @user = User.find(params[:id])
-    @posts = @user.posts
+    @posts = @user.posts.order(id: :desc)
     render json: @posts
   end
 
@@ -21,7 +21,7 @@ class UsersController < SecuredController
   
   def comments
     @user = User.find(params[:id])
-    @comments = @user.comments
+    @comments = @user.comments.order(id: :desc)
     render json: @comments
   end
 
@@ -29,6 +29,7 @@ class UsersController < SecuredController
     @user = User.find(params[:id])
     @bookmarked_hacks = @user.bookmarked_hacks.order(id: :desc)
     @bookmarked_comments = @user.bookmarked_comments.order(id: :desc)
+    render json: { comments: @bookmarked_comments, hacks: @bookmarked_hacks }
   end
 
   def create
