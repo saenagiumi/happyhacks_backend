@@ -3,6 +3,7 @@
 # Table name: bookmarks
 #
 #  id         :bigint           not null, primary key
+#  status     :string           default("want")
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  comment_id :bigint

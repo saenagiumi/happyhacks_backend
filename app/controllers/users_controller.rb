@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:update, :destroy]
-  skip_before_action :authorize_request, only: [:index, :posts, :hacks, :comments]
+  skip_before_action :authorize_request, only: [:index, :posts, :hacks, :comments, :bookmarks]
 
   def show
     @user = User.find_by(sub: params[:sub])
@@ -24,12 +24,15 @@ class UsersController < ApplicationController
     @comments = @user.comments.order(id: :desc)
     render json: @comments
   end
-
+  
   def bookmarks
     @user = User.find(params[:id])
-    @bookmarked_hacks = @user.bookmarked_hacks.order(id: :desc)
-    @bookmarked_comments = @user.bookmarked_comments.order(id: :desc)
-    render json: { comments: @bookmarked_comments, hacks: @bookmarked_hacks }
+    @bookmarks = @user.bookmarks
+    bookmarks_data = {
+      hacks: serialize_bookmarks(@bookmarks.where.not(hack_id: nil)),
+      comments: serialize_bookmarks(@bookmarks.where.not(comment_id: nil))
+    }
+    render json: bookmarks_data
   end
 
   def create
@@ -60,5 +63,30 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:sub, :name, :picture)
+    end
+
+    def serialize_bookmarks(bookmarks)
+      bookmarks.map do |bookmark|
+        serialize_bookmark(bookmark)
+      end
+    end
+
+    def serialize_bookmark(bookmark)
+      if bookmark.comment.present?
+        {
+          id: bookmark.comment.id,
+          post_id: bookmark.comment.post.id,
+          title: bookmark.comment.title,
+          body: bookmark.comment.body,
+          status: bookmark.status
+        }
+      elsif bookmark.hack.present?
+        {
+          id: bookmark.hack.id,
+          title: bookmark.hack.title,
+          body: bookmark.hack.body,
+          status: bookmark.status
+        }
+      end
     end
 end
