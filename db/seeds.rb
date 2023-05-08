@@ -11,57 +11,57 @@ User.create!(
     {
       name: "河野太郎",
       sub: "12345",
-      picture: "/userAvatar/bear.svg"
+      picture: "/userAvatar/bear.webp"
     },
     {
       name: "奈良公園のシカ",
       sub: "23456",
-      picture: "/userAvatar/cat.svg"
+      picture: "/userAvatar/cat.webp"
     },
     {
       name: "ひがしものメバチマグロ",
       sub: "34567",
-      picture: "/userAvatar/chicken.svg"
+      picture: "/userAvatar/chicken.webp"
     },
     {
       name: "エンバペ",
       sub: "45678",
-      picture: "/userAvatar/cow.svg"
+      picture: "/userAvatar/cow.webp"
     },
     {
       name: "一太郎スマイル",
       sub: "56789",
-      picture: "/userAvatar/panda.svg"
+      picture: "/userAvatar/panda.webp"
     },
     {
       name: "醸し人九平次",
       sub: "67891",
-      picture: "/userAvatar/dog.svg"
+      picture: "/userAvatar/dog.webp"
     },
     {
       name: "秋田太平山",
       sub: "78912",
-      picture: "/userAvatar/elephant.svg"
+      picture: "/userAvatar/elephant.webp"
     },
     {
       name: "ロナウジーニョ",
       sub: "89123",
-      picture: "/userAvatar/mouse.svg"
+      picture: "/userAvatar/mouse.webp"
     },
     {
       name: "デジタル田園都市",
       sub: "91234",
-      picture: "/userAvatar/penguin.svg"
+      picture: "/userAvatar/penguin.webp"
     },
     {
       name: "あさがおを摘む人",
       sub: "0123456",
-      picture: "/userAvatar/rabbit.svg"
+      picture: "/userAvatar/rabbit.webp"
     },
     {
       name: "あさがお",
       sub: "012345678",
-      picture: "/userAvatar/bear.svg"
+      picture: "/userAvatar/bear.webp"
     }
   ]
 )
