@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'https://happyhacks.app', 'https://www.happyhacks.app', '127.0.0.1:3001', 'localhost:3001', '192.168.10.109:3001'
+    origins 'https://happyhacks.app', 'https://www.happyhacks.app'
     
     resource '*',
       headers: :any,
