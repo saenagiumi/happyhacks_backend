@@ -1,24 +1,11 @@
-# README
+## 概要
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+こちらはHappyHacksのバックエンドのリポジトリです。
 
-Things you may want to cover:
+**メインリポジトリ（サービスや全体概要はこちら）**
 
-* Ruby version
+https://github.com/tak-eru/happyhacks
 
-* System dependencies
+**フロントエンドリポジトリ**
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+https://github.com/tak-eru/happyhacks_frontend
